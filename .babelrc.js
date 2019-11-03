@@ -8,7 +8,6 @@ module.exports = {
       "@babel/preset-env",
       {
         loose: true,
-        modules: false,
         useBuiltIns: 'entry',
         corejs: 3,
       }

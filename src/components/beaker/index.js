@@ -26,12 +26,23 @@ class Beaker {
 
   _checkForCollision(event) {
     let draggedElement = this.elements.find(element => element.isMouseDown);
-    if (!draggedElement) return;
+    if (!draggedElement) {
+      this._spawnNewElement(event);
+      return;
+    }
 
     let collidingElement = this._getCollidingElement(draggedElement);
     if (!collidingElement) return;
 
     this._mix(event, draggedElement, collidingElement);
+  }
+
+  _spawnNewElement(event) {
+    let index = Math.floor(Math.random() * ELEMENTARY.length);
+    let newElement = new Element(ELEMENTARY[index]);
+
+    newElement.setPosition(event.pageX, event.pageY);
+    this.elements.push(newElement);
   }
 
   _getCollidingElement(draggedElement) {

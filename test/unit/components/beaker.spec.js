@@ -7,8 +7,9 @@ describe('Beaker', () => {
     it('broadcast the event to all elements', () => {
       const beaker = new Beaker();
       const spies = beaker.elements.map(element => jest.spyOn(element, 'onMouseUp'));
+      const event = { pageX: 0, pageY: 0 };
 
-      beaker.onMouseUp();
+      beaker.onMouseUp(event);
 
       spies.forEach(spy => {
         expect(spy).toHaveBeenCalled();

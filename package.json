@@ -13,6 +13,7 @@
     "aurelia-animator-css": "^1.0.4",
     "aurelia-bootstrapper": "^2.3.2",
     "core-js": "3",
+    "express": "^4.17.1",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
     "raf": "^3.4.1",
@@ -68,8 +69,9 @@
   },
   "scripts": {
     "build": "webpack --env.production --extractCss",
-    "start": "webpack-dev-server --extractCss",
+    "start": "node src/server.js",
     "build:dev": "webpack --extractCss",
+    "start:dev": "webpack-dev-server --extractCss",
     "analyze": "webpack --env.production --analyze",
     "test": "au test"
   },

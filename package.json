@@ -79,6 +79,7 @@
     },
     "modulePaths": [
       "<rootDir>/src",
+      "<rootDir>/test",
       "<rootDir>/node_modules"
     ],
     "moduleFileExtensions": [

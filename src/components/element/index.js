@@ -10,11 +10,30 @@ class Element {
     this.dy = Math.random() * SPEED * 2 - SPEED;
   }
 
+  onMouseDown() {
+    this.isMouseDown = true;
+  }
+
+  onMouseMove(event) {
+    if (!this.isMouseDown) return;
+
+    this.x = this._inRelativeTo(event.pageX, window.innerWidth);
+    this.y = this._inRelativeTo(event.pageY, window.innerHeight);
+    this.dx = this._inRelativeTo(event.movementX / 5, window.innerWidth, SPEED * 5);
+    this.dy = this._inRelativeTo(event.movementY / 5, window.innerHeight, SPEED * 5);
+  }
+
+  onMouseUp() {
+    this.isMouseDown = false;
+  }
+
   display() {
     return ELEMENTS[this.index];
   }
 
   tick = () => {
+    if (this.isMouseDown) return;
+
     this._updateX();
     this._updateY();
   };
@@ -43,6 +62,14 @@ class Element {
     } else {
       return [a, da];
     }
+  }
+
+  _inRelativeTo(local, global, boundary = 100) {
+    let percentage = (local / global) * 100;
+
+    if (percentage > boundary) return boundary;
+    else if (percentage < -boundary) return -boundary;
+    else return percentage;
   }
 }
 

@@ -14,6 +14,9 @@ class Beaker {
     window.cancelAnimationFrame(this.raf);
   }
 
+  onMouseUp() {
+    this._broadcast('onMouseUp');
+  }
 
   tick = () => {
     this._broadcast('tick');

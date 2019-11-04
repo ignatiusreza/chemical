@@ -1,10 +1,12 @@
 <template>
   <require from="./app.css"></require>
-  <div style="background:black">
+  <div style="background:black" mouseup.delegate="beaker.onMouseUp()">
     <div
       repeat.for="element of beaker.elements"
       class="absolute text-4xl element"
       css="left: ${element.x}%; top: ${element.y}%;"
+      mousedown.delegate="element.onMouseDown()"
+      mousemove.delegate="element.onMouseMove($event)"
     >
       ${element.display()}
     </div>

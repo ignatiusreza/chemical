@@ -2,6 +2,33 @@ import { ELEMENTS } from 'constants/elements';
 import Element from 'components/element';
 
 describe('Element', () => {
+  describe('onMouseMove', () => {
+    it('updates element position and velocity in related to the mouse position', () => {
+      const element = stubElement({ x: 50, y: 50, dx: 1, dy: -1 });
+
+      element.onMouseDown();
+      // jest set window size @ 1024 x 768
+      element.onMouseMove({ pageX: 102.4, pageY: 38.4, movementX: 20.48, movementY: -15.36 });
+      element.onMouseUp();
+
+      expect(element.x).toEqual(10);
+      expect(element.y).toEqual(5);
+      expect(element.dx).toEqual(0.25);
+      expect(element.dy).toEqual(-0.25);
+    });
+
+    it('is ignored unless onMouseDown is called first', () => {
+      const element = stubElement({ x: 50, y: 50, dx: 1, dy: -1 });
+
+      element.onMouseMove({ pageX: 102.4, pageY: 38.4, movementX: 20.48, movementY: -3.84 });
+
+      expect(element.x).toEqual(50);
+      expect(element.y).toEqual(50);
+      expect(element.dx).toEqual(1);
+      expect(element.dy).toEqual(-1);
+    });
+  });
+
   describe('display()', () => {
     it('displays the visual representation of certain element', () => {
       ELEMENTS.forEach((visual, index) => {
@@ -32,6 +59,16 @@ describe('Element', () => {
 
       expect(element.y).toEqual(2);
       expect(element.dy).toEqual(2);
+    });
+
+    it('does not updates the element position if mouse is down', () => {
+      const element = stubElement({ x: 50, y: 50, dx: 1, dy: -1 });
+
+      element.onMouseDown();
+      element.tick();
+
+      expect(element.x).toEqual(50);
+      expect(element.y).toEqual(50);
     });
   });
 });

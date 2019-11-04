@@ -14,7 +14,8 @@ class Beaker {
     window.cancelAnimationFrame(this.raf);
   }
 
-  onMouseUp() {
+  onMouseUp(event) {
+    this._checkForCollision(event);
     this._broadcast('onMouseUp');
   }
 
@@ -23,8 +24,43 @@ class Beaker {
     this.raf = window.requestAnimationFrame(this.tick);
   };
 
-  mix(a, b) {
-    return MIX[a][b];
+  _checkForCollision(event) {
+    let draggedElement = this.elements.find(element => element.isMouseDown);
+    if (!draggedElement) return;
+
+    let collidingElement = this._getCollidingElement(draggedElement);
+    if (!collidingElement) return;
+
+    this._mix(event, draggedElement, collidingElement);
+  }
+
+  _getCollidingElement(draggedElement) {
+    return this.elements.find(
+      element => element !== draggedElement && this._isCollide(draggedElement.node, element.node),
+    );
+  }
+
+  _isCollide(a, b) {
+    return !(
+      a.offsetTop + a.clientHeight < b.offsetTop ||
+      a.offsetTop > b.offsetTop + b.clientHeight ||
+      a.offsetLeft + a.clientWidth < b.offsetLeft ||
+      a.offsetLeft > b.offsetLeft + b.clientWidth
+    );
+  }
+
+  _mix(event, a, b) {
+    let target = MIX[a.index]?.[b.index];
+
+    if (!target) return;
+
+    let merged = new Element(target);
+    merged.setPosition(event.pageX, event.pageY);
+
+    this.elements.splice(this.elements.indexOf(a), 1);
+    this.elements.splice(this.elements.indexOf(b), 1);
+
+    this.elements.push(merged);
   }
 
   _broadcast(event) {

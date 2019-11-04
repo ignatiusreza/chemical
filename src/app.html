@@ -1,7 +1,8 @@
 <template>
   <require from="./app.css"></require>
-  <div style="background:black" mouseup.delegate="beaker.onMouseUp()">
+  <div style="background:black" mouseup.delegate="beaker.onMouseUp($event)">
     <div
+      ref="element.node"
       repeat.for="element of beaker.elements"
       class="absolute text-4xl element"
       css="left: ${element.x}%; top: ${element.y}%;"

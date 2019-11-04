@@ -10,6 +10,11 @@ class Element {
     this.dy = Math.random() * SPEED * 2 - SPEED;
   }
 
+  setPosition(x, y) {
+    this.x = this._inRelativeTo(x, window.innerWidth);
+    this.y = this._inRelativeTo(y, window.innerHeight);
+  }
+
   onMouseDown() {
     this.isMouseDown = true;
   }

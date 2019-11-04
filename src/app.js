@@ -1,3 +1,13 @@
+import Beaker from 'components/beaker';
+
 export class App {
-  message = 'Hello World!';
+  beaker = new Beaker();
+
+  attached() {
+    this.beaker.attached();
+  }
+
+  detached() {
+    this.beaker.detached();
+  }
 }

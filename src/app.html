@@ -1,4 +1,12 @@
 <template>
   <require from="./app.css"></require>
-  <h1>${message}</h1>
+  <div style="background:black">
+    <div
+      repeat.for="element of beaker.elements"
+      class="absolute text-4xl element"
+      css="left: ${element.x}%; top: ${element.y}%;"
+    >
+      ${element.display()}
+    </div>
+  </div>
 </template>

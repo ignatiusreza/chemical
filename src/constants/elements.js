@@ -5,7 +5,7 @@ export const ELEMENTS = [
   '🔩', '🌪',
   '🌫',
 ];
-export const ELEMENTARY = ELEMENTS.slice(0, 4);
+export const ELEMENTARY = [0, 1, 2, 3];
 export const MIX = [
   // prettier-ignore
   [0, 4, 5, 6],

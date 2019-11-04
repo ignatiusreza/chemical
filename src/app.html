@@ -1,6 +1,10 @@
 <template>
   <require from="./app.css"></require>
-  <div class="absolute inset-0" mouseup.delegate="beaker.onMouseUp($event)">
+  <div
+    class="absolute inset-0"
+    mousemove.delegate="beaker.onMouseMove($event)"
+    mouseup.delegate="beaker.onMouseUp($event)"
+  >
     <div
       ref="element.node"
       repeat.for="element of beaker.elements"

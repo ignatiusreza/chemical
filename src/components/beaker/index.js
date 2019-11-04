@@ -14,6 +14,12 @@ class Beaker {
     window.cancelAnimationFrame(this.raf);
   }
 
+  onMouseMove(event) {
+    const element = this._getDraggedElement();
+
+    if (element) element.onMouseMove(event);
+  }
+
   onMouseUp(event) {
     this._checkForCollision(event);
     this._broadcast('onMouseUp');
@@ -25,7 +31,7 @@ class Beaker {
   };
 
   _checkForCollision(event) {
-    let draggedElement = this.elements.find(element => element.isMouseDown);
+    let draggedElement = this._getDraggedElement();
     if (!draggedElement) {
       this._spawnNewElement(event);
       return;
@@ -43,6 +49,10 @@ class Beaker {
 
     newElement.setPosition(event.pageX, event.pageY);
     this.elements.push(newElement);
+  }
+
+  _getDraggedElement() {
+    return this.elements.find(element => element.isMouseDown);
   }
 
   _getCollidingElement(draggedElement) {

@@ -1,4 +1,15 @@
 <template>
   <require from="./app.css"></require>
-  <h1>${message}</h1>
+  <div class="absolute inset-0" mouseup.delegate="beaker.onMouseUp($event)">
+    <div
+      ref="element.node"
+      repeat.for="element of beaker.elements"
+      class="absolute text-4xl element"
+      css="left: ${element.x}%; top: ${element.y}%;"
+      mousedown.delegate="element.onMouseDown()"
+      mousemove.delegate="element.onMouseMove($event)"
+    >
+      ${element.display()}
+    </div>
+  </div>
 </template>

@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 body {
-  @apply bg-black text-white;
+  @apply bg-black text-white overflow-hidden;
+}
+
+.element {
+  @apply cursor-pointer;
+  width: 50px;
+  height: 50px;
+  margin-left: -25px;
+  margin-top: -25px;
 }

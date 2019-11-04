@@ -10,9 +10,8 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // config helpers:
-const ensureArray = (config) => config && (Array.isArray(config) ? config : [config]) || [];
-const when = (condition, config, negativeConfig) =>
-  condition ? ensureArray(config) : ensureArray(negativeConfig);
+const ensureArray = config => (config && (Array.isArray(config) ? config : [config])) || [];
+const when = (condition, config, negativeConfig) => (condition ? ensureArray(config) : ensureArray(negativeConfig));
 
 // primary config:
 const title = 'Aurelia Navigation Skeleton';
@@ -21,12 +20,9 @@ const srcDir = path.resolve(__dirname, 'src');
 const nodeModulesDir = path.resolve(__dirname, 'node_modules');
 const baseUrl = '/';
 
-const cssRules = [
-  { loader: 'css-loader' },
-];
+const cssRules = [{ loader: 'css-loader' }];
 
-
-module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, host } = {}) => ({
+module.exports = ({ production } = {}, { extractCss, analyze, tests, hmr, port, host } = {}) => ({
   resolve: {
     extensions: ['.js'],
     modules: [srcDir, 'node_modules'],
@@ -46,7 +42,7 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
     chunkFilename: production ? '[name].[chunkhash].chunk.js' : '[name].[hash].chunk.js',
   },
   optimization: {
-    runtimeChunk: true,  // separates the runtime chunk, required for long term cacheability
+    runtimeChunk: true, // separates the runtime chunk, required for long term cacheability
     // moduleIds is the replacement for HashedModuleIdsPlugin and NamedModulesPlugin deprecated in https://github.com/webpack/webpack/releases/tag/v4.16.0
     // changes module id's to use hashes be based on the relative path of the module, required for long term cacheability
     moduleIds: 'hashed',
@@ -76,28 +72,31 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
         // },
 
         // This is the HTTP/1.1 optimised cacheGroup configuration
-        vendors: { // picks up everything from node_modules as long as the sum of node modules is larger than minSize
+        vendors: {
+          // picks up everything from node_modules as long as the sum of node modules is larger than minSize
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           priority: 19,
           enforce: true, // causes maxInitialRequests to be ignored, minSize still respected if specified in cacheGroup
           minSize: 30000, // use the default minSize
         },
-        vendorsAsync: { // vendors async chunk, remaining asynchronously used node modules as single chunk file
+        vendorsAsync: {
+          // vendors async chunk, remaining asynchronously used node modules as single chunk file
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors.async',
           chunks: 'async',
           priority: 9,
           reuseExistingChunk: true,
-          minSize: 10000,  // use smaller minSize to avoid too much potential bundle bloat due to module duplication.
+          minSize: 10000, // use smaller minSize to avoid too much potential bundle bloat due to module duplication.
         },
-        commonsAsync: { // commons async chunk, remaining asynchronously used modules as single chunk file
+        commonsAsync: {
+          // commons async chunk, remaining asynchronously used modules as single chunk file
           name: 'commons.async',
           minChunks: 2, // Minimum number of chunks that must share a module before splitting
           chunks: 'async',
           priority: 0,
           reuseExistingChunk: true,
-          minSize: 10000,  // use smaller minSize to avoid too much potential bundle bloat due to module duplication.
+          minSize: 10000, // use smaller minSize to avoid too much potential bundle bloat due to module duplication.
         },
       },
     },
@@ -119,11 +118,7 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
       {
         test: /\.css$/i,
         issuer: [{ not: [{ test: /\.html$/i }] }],
-        use: extractCss ? [{
-          loader: MiniCssExtractPlugin.loader,
-        },
-        'css-loader',
-        ] : ['style-loader', ...cssRules],
+        use: extractCss ? [{ loader: MiniCssExtractPlugin.loader }, 'css-loader'] : ['style-loader', ...cssRules],
       },
       {
         test: /\.css$/i,
@@ -134,25 +129,48 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
       },
       { test: /\.html$/i, loader: 'html-loader' },
       {
-        test: /\.js$/i, loader: 'babel-loader', exclude: nodeModulesDir,
+        test: /\.js$/i,
+        loader: 'babel-loader',
+        exclude: nodeModulesDir,
         options: tests ? { sourceMap: 'inline', plugins: ['istanbul'] } : {},
       },
       // embed small images and fonts as Data Urls and larger ones as files:
-      { test: /\.(png|gif|jpg|cur)$/i, loader: 'url-loader', options: { limit: 8192 } },
-      { test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff2' } },
-      { test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff' } },
+      {
+        test: /\.(png|gif|jpg|cur)$/i,
+        loader: 'url-loader',
+        options: { limit: 8192 },
+      },
+      {
+        test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        loader: 'url-loader',
+        options: { limit: 10000, mimetype: 'application/font-woff2' },
+      },
+      {
+        test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        loader: 'url-loader',
+        options: { limit: 10000, mimetype: 'application/font-woff' },
+      },
       // load these fonts normally, as files:
-      { test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'file-loader' },
-      { test: /environment\.json$/i, use: [
-        {loader: 'app-settings-loader', options: {env: production ? 'production' : 'development' }},
-      ]},
+      {
+        test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+        loader: 'file-loader',
+      },
+      {
+        test: /environment\.json$/i,
+        use: [
+          {
+            loader: 'app-settings-loader',
+            options: { env: production ? 'production' : 'development' },
+          },
+        ],
+      },
     ],
   },
   plugins: [
     ...when(!tests, new DuplicatePackageCheckerPlugin()),
     new AureliaPlugin(),
     new ProvidePlugin({
-      'Promise': ['promise-polyfill', 'default'],
+      Promise: ['promise-polyfill', 'default'],
     }),
     new ModuleDependenciesPlugin({
       'aurelia-testing': ['./compile-spy', './view-spy'],
@@ -161,16 +179,20 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
       template: 'index.ejs',
       metadata: {
         // available in index.ejs //
-        title, baseUrl,
+        title,
+        baseUrl,
       },
     }),
     // ref: https://webpack.js.org/plugins/mini-css-extract-plugin/
-    ...when(extractCss, new MiniCssExtractPlugin({ // updated to match the naming conventions for the js files
-      filename: production ? 'css/[name].[contenthash].bundle.css' : 'css/[name].[hash].bundle.css',
-      chunkFilename: production ? 'css/[name].[contenthash].chunk.css' : 'css/[name].[hash].chunk.css',
-    })),
-    ...when(!tests, new CopyWebpackPlugin([
-      { from: 'static', to: outDir, ignore: ['.*'] }])), // ignore dot (hidden) files
+    ...when(
+      extractCss,
+      new MiniCssExtractPlugin({
+        // updated to match the naming conventions for the js files
+        filename: production ? 'css/[name].[contenthash].bundle.css' : 'css/[name].[hash].bundle.css',
+        chunkFilename: production ? 'css/[name].[contenthash].chunk.css' : 'css/[name].[hash].chunk.css',
+      }),
+    ),
+    ...when(!tests, new CopyWebpackPlugin([{ from: 'static', to: outDir, ignore: ['.*'] }])), // ignore dot (hidden) files
     ...when(analyze, new BundleAnalyzerPlugin()),
     /**
      * Note that the usage of following plugin cleans the webpack output directory before build.

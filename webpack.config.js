@@ -20,7 +20,7 @@ const srcDir = path.resolve(__dirname, 'src');
 const nodeModulesDir = path.resolve(__dirname, 'node_modules');
 const baseUrl = '/';
 
-const cssRules = [{ loader: 'css-loader' }];
+const cssRules = [{ loader: 'css-loader' }, { loader: 'postcss-loader' }];
 
 module.exports = ({ production } = {}, { extractCss, analyze, tests, hmr, port, host } = {}) => ({
   resolve: {

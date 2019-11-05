@@ -25,6 +25,17 @@ class Beaker {
     this._broadcast('onMouseUp');
   }
 
+  onTouchMove(event) {
+    const element = this._getDraggedElement();
+
+    if (element) element.onTouchMove(event);
+  }
+
+  onTouchEnd(event) {
+    const mouseEvent = this._translateTouchEvent('mouseup', event);
+    this.onMouseUp(mouseEvent);
+  }
+
   tick = () => {
     this._broadcast('tick');
     this.raf = window.requestAnimationFrame(this.tick);
@@ -68,6 +79,12 @@ class Beaker {
       a.offsetLeft + a.clientWidth < b.offsetLeft ||
       a.offsetLeft > b.offsetLeft + b.clientWidth
     );
+  }
+
+  _translateTouchEvent(type, touchEvent) {
+    const touch = touchEvent.touches[0] || touchEvent.changedTouches[0];
+
+    return { pageX: touch.pageX, pageY: touch.pageY };
   }
 
   _mix(event, a, b) {

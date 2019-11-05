@@ -4,6 +4,8 @@
     class="absolute inset-0"
     mousemove.delegate="beaker.onMouseMove($event)"
     mouseup.delegate="beaker.onMouseUp($event)"
+    touchmove.delegate="beaker.onTouchMove($event)"
+    touchend.delegate="beaker.onTouchEnd($event)"
   >
     <div
       ref="element.node"
@@ -12,6 +14,8 @@
       css="left: ${element.x}%; top: ${element.y}%;"
       mousedown.delegate="element.onMouseDown()"
       mousemove.delegate="element.onMouseMove($event)"
+      touchstart.delegate="element.onTouchStart($event)"
+      touchmove.delegate="element.onTouchMove($event)"
     >
       ${element.display()}
     </div>

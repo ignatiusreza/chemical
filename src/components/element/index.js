@@ -32,6 +32,22 @@ class Element {
     this.isMouseDown = false;
   }
 
+  onTouchStart(event) {
+    console.log('onTouchStart');
+    this._prevTouches = [event.touches[0]];
+    this.onMouseDown();
+  }
+
+  onTouchMove(event) {
+    this.onMouseMove(this._translateTouchEvent('mousemove', event));
+    this._prevTouches.push(event.touches[0]);
+  }
+
+  onTouchEnd() {
+    this._prevTouches = [];
+    this.onMouseUp();
+  }
+
   display() {
     return ELEMENTS[this.index];
   }
@@ -42,6 +58,27 @@ class Element {
     this._updateX();
     this._updateY();
   };
+
+  _translateTouchEvent(type, touchEvent) {
+    const touch = touchEvent.touches[0];
+    // comparing the last touch with the one before it tend to result in 0 movement,
+    // hence we calculate average movements from all the touches
+    const movement = this._prevTouches.reduce(
+      ({ x, y, prev }, touch) => ({
+        x: x + (touch.pageX - prev.pageX),
+        y: y + (touch.pageY - prev.pageY),
+        prev: touch,
+      }),
+      { x: 0, y: 0, prev: this._prevTouches[0] },
+    );
+
+    return {
+      pageX: touch.pageX,
+      pageY: touch.pageY,
+      movementX: movement.x / this._prevTouches.length,
+      movementY: movement.y / this._prevTouches.length,
+    };
+  }
 
   _updateX() {
     const [x, dx] = this._update(this.x, this.dx);
